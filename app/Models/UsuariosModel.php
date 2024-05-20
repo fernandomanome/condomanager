@@ -8,19 +8,28 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
-class User extends Authenticatable
+class UsuariosModel extends Authenticatable
 {
+    protected $table = 'usuarios';
     use HasApiTokens, HasFactory, Notifiable;
-
+    
+    public function getAuthPassword(){
+        return $this->senha;
+    }
+    
     /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'unidade_id',
+        'nome',
         'email',
-        'password',
+        'senha',
+        'telefone',
+        'celular_whatsapp',
+        'ativo',
     ];
 
     /**
@@ -29,7 +38,7 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $hidden = [
-        'password',
+        'senha',
         'remember_token',
     ];
 
@@ -40,6 +49,12 @@ class User extends Authenticatable
      */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'senha' => 'hashed',
+        'ativo' => 'boolean',
     ];
+
+    public function unidade()
+    {
+        return $this->belongsTo(UnidadesModel::class);
+    }
 }
